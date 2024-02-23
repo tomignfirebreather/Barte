@@ -1,0 +1,46 @@
+<header>
+    <div>
+        <a class="barte" href="/index.html">
+            <h1>BARTÉ</h1>
+        </a>
+        <h2>Tus tragos favoritos en un solo lugar</h2>
+    </div>
+    <div>
+        <nav>
+            <ul id="navbar">
+                {{#each navbarItems}}
+                    {{#if activeSession}}
+                        {{#if itemActiveSession}}
+                            <button id="{{id}}">
+                            {{#if span}}
+                                <li>
+                                    <span class= "{{id}}">
+                                        {{name}}
+                                    </span>
+                                </li>
+                            {{else}}
+                                <li>{{name}}</li>
+                            {{/if}}
+                            </button>
+                        {{/if}}
+                    {{/if}}
+                    {{#unless activeSession}}
+                        {{#if itemInactiveSession}}
+                            <button id="{{id}}">
+                            {{#if span}}
+                                <li>
+                                    <span class= "{{class}}">
+                                        {{name}}
+                                    </span>
+                                </li>
+                            {{else}}
+                                <li>{{name}}</li>
+                            {{/if}}
+                            </button>
+                        {{/if}}
+                    {{/unless}}
+                {{/each}}
+            </ul>
+        </nav>
+    </div>
+</header>
