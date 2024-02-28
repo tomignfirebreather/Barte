@@ -114,21 +114,18 @@ main {
     text-align: center;
 }
 
-#seccionFinal a button {
+#seccionFinal button {
     background-image: linear-gradient(to right, rgb(102, 16, 242) 0%, rgb(217, 13, 122) 50%);
     color: white;
     border: none;
     border-radius: 8px;
-    width: auto;
-    height: auto;
-    padding: 12% 24% 12% 24%;
+    padding: 2% 4% 2% 4%;
     text-align: center;
     font-size: 1em;
     font-weight: normal;
 }
 
-#seccionFinal a button:hover {
-    border: none;
+#seccionFinal button:hover {
     background-image: linear-gradient(to right, rgb(217, 13, 122) 50%, rgb(102, 16, 242) 100%);
     cursor: pointer;
 }

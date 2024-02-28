@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const {
     paginaCrearPerfil,
+    paginaIniciarSesion,
     crearPerfil,
     buscarPerfil,
     editarPerfil,
@@ -20,8 +21,8 @@ router.get('/profile/get', jwtAuthenticator(true), buscarPerfil);
 router.put('/profile/edit', jwtAuthenticator(true), roleAuthenticator('client'), editarPerfil);
 router.delete('/profile/delete', jwtAuthenticator(true), roleAuthenticator('client'), eliminarPerfil);
 
+router.get('/session/login', jwtAuthenticator(false), paginaIniciarSesion); /* programar: paginaIniciarSesion */
 router.post('/session/login', jwtAuthenticator(false), iniciarSesion);
-router.get('/session/login', jwtAuthenticator(true), enviarSesion);
 router.get('/session/logout', jwtAuthenticator(true), cerrarSesion);
 
 module.exports = router;

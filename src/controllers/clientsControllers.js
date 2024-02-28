@@ -9,6 +9,18 @@ const {
 
 const paginaCrearPerfil = (req, res) => {
     const activeSession = verificarSesion(req, res).status;
+    const scriptPages = [
+        {
+            src: '/js/header.js',
+            integrity: '',
+            crossorigin: ''
+        },
+        {
+            src: '/js/form.js',
+            integrity: '',
+            crossorigin: ''
+        }
+    ]
         const navbarItems = [
             {
                 name: 'Ya tengo una cuenta',
@@ -19,7 +31,33 @@ const paginaCrearPerfil = (req, res) => {
                 itemInactiveSession: true,
             }
         ]
-    res.render('createProfile', {stylesPage: 'createProfile', title: 'Barté - Crear Cuenta', activeSession, navbarItems});
+    res.render('createProfile', {stylesPage: 'createProfile', scriptPages, title: 'Barté - Crear Cuenta', activeSession, navbarItems});
+}
+const paginaIniciarSesion = (req, res) => {
+    const activeSession = verificarSesion(req, res).status;
+    const scriptPages = [
+        {
+            src: '/js/header.js',
+            integrity: '',
+            crossorigin: ''
+        },
+        {
+            src: '/js/form.js',
+            integrity: '',
+            crossorigin: ''
+        }
+    ]
+        const navbarItems = [
+            {
+                name: 'Creá tu cuenta',
+                id: 'createProfile',
+                class: '',
+                span: false,
+                itemActiveSession: true,
+                itemInactiveSession: true,
+            }
+        ]
+    res.render('initSession', {stylesPage: 'initSession', scriptPages, title: 'Barté - Iniciar Sesión', activeSession, navbarItems});
 }
 const crearPerfil = async (req, res) => {
     var {
@@ -122,6 +160,7 @@ const buscarFavoritos = async (req, res) => {
 
 module.exports = {
     paginaCrearPerfil,
+    paginaIniciarSesion,
     crearPerfil,
     verificarSesion,
     iniciarSesion,

@@ -8,12 +8,26 @@ const {
 } = require('../models/productsModels');
 const { response } = require('../app');
 const { verificarSesion } = require('./clientsControllers');
+const { log } = require('console');
 
 const paginaProductos = async (req, res) => {
     const response = await buscarTotalProductos();
     if(response.message === 'Se han encontrado productos') {
         products = response.data;
+        req.session.products = products;
         const activeSession = verificarSesion(req, res).status;
+        const scriptPages = [
+            {
+                src: '/js/header.js',
+                integrity: '',
+                crossorigin: ''
+            },
+            {
+                src: '/js/products.js',
+                integrity: '',
+                crossorigin: ''
+            }
+        ]
         const navbarItems = [
             {
                 name: 'Inicio',
@@ -56,12 +70,93 @@ const paginaProductos = async (req, res) => {
                 itemInactiveSession: true
             },
         ]
-        res.render('products', {stylesPage: 'products', activeSession, navbarItems, products});
+        res.render('products', {stylesPage: 'products', scriptPages, title: 'Barté - Productos', activeSession, navbarItems, products});
     } else {
         res.json({
             message: response.message
         });
     }
+};
+
+const paginaInfoProducto = async (req, res) => {
+    const product = req.session.product;
+    console.log(product);
+    const activeSession = verificarSesion(req, res).status;
+    const scriptPages = [
+        {
+            src: '/js/header.js',
+            integrity: '',
+            crossorigin: ''
+        },
+        {
+            src: '/js/infoProduct.js',
+            integrity: '',
+            crossorigin: ''
+        },
+        {
+            src: 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js',
+            integrity: 'sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL',
+            crossorigin: 'anonymous'
+        }
+    ]
+    const navbarItems = [
+        {
+            name: 'Inicio',
+            id: 'init',
+            class: '',
+            span: false,
+            itemActiveSession: true,
+            itemInactiveSession: true,
+        },
+        {
+            name: 'Productos',
+            id: 'products',
+            class: '',
+            span: false,
+            itemActiveSession: true,
+            itemInactiveSession: true,
+        },
+        {
+            name: 'Creá tu cuenta',
+            id: 'createProfile',
+            class: '',
+            span: false,
+            itemActiveSession: false,
+            itemInactiveSession: true
+        },
+        {
+            name: 'Ingresá',
+            id: 'login',
+            class: '',
+            span: false,
+            itemActiveSession: false,
+            itemInactiveSession: true
+        },
+        {
+            name: 'Cerrar sesión',
+            id: 'logout',
+            class: '',
+            span: false,
+            itemActiveSession: true,
+            itemInactiveSession: false
+        },
+        {
+            name: 'shopping_cart',
+            id: '',
+            class: 'material-symbols-outlined',
+            span: true,
+            itemActiveSession: true,
+            itemInactiveSession: true
+        },
+    ]
+    res.render('infoProduct', {stylesPage: 'infoProduct', scriptPages, title: 'Barté - Info Producto', activeSession, navbarItems, product});
+};
+
+const infoProducto = async (req, res) => {
+    const productId = req.headers.id;
+    const product = req.session.products.find(product => product._id === productId);
+    req.session.product = product;
+    res.send();
 };
 
 const insertarProductos = async (req, res) => {
@@ -264,6 +359,8 @@ const eliminarProductos = async (req, res) => {
 
 module.exports = {
     paginaProductos,
+    paginaInfoProducto,
+    infoProducto,
     insertarProductos,
     buscarProductos,
     buscarTotalProductos,

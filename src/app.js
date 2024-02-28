@@ -44,6 +44,18 @@ app.set('views', path.join(__dirname, '../views'));
 
 app.get('/', (req, res) => {
     const activeSession = verificarSesion(req, res).status;
+    const scriptPages = [
+        {
+            src: '/js/header.js',
+            integrity: '',
+            crossorigin: ''
+        },
+        {
+            src: '/js/home.js',
+            integrity: '',
+            crossorigin: ''
+        }
+    ]
     const navbarItems = [
         {
             name: 'Productos',
@@ -86,7 +98,7 @@ app.get('/', (req, res) => {
             itemInactiveSession: true
         },
     ]
-    res.render('home', {stylesPage: 'home', title: 'Barté', activeSession, navbarItems});
+    res.render('home', {stylesPage: 'home', scriptPages, title: 'Barté', activeSession, navbarItems});
 });
 
 module.exports = app;
