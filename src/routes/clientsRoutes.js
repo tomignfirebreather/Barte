@@ -8,7 +8,6 @@ const {
     editarPerfil,
     eliminarPerfil,
     iniciarSesion,
-    enviarSesion,
     cerrarSesion,
 } = require('../controllers/clientsControllers');
 

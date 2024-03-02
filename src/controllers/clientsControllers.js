@@ -1,11 +1,11 @@
-const path = require('path');
-
 const {
     validarData,
     guardarPerfil,
     validarPerfil,
     generarJWT
 } = require('../models/clientsModels');
+
+const paginaProductos = require('./productsControllers');
 
 const paginaCrearPerfil = (req, res) => {
     const activeSession = verificarSesion(req, res).status;
@@ -80,7 +80,7 @@ const crearPerfil = async (req, res) => {
                 token
             };
             res.set({ 'token': token });
-            res.status(302).redirect('/clients/session/login');
+            enviarSesion();
         } else {
             res.status(400).send({
                 message: resultado.error_db
@@ -112,7 +112,7 @@ const iniciarSesion = async (req, res) => {
             token
         }
         res.set({ 'token': token });
-        res.status(302).redirect('/clients/session/login');
+        enviarSesion();
     } else if(resultado.error_db !== undefined) {
         res.status(400).send({
             message: resultado.error_db
@@ -125,9 +125,9 @@ const iniciarSesion = async (req, res) => {
 };
 const enviarSesion = async (req, res) => {
     if (req.session.userRolType == 'admin') {
-        res.sendFile(path.join(__dirname, '../public/pages/admin.html'));
+        /* enviar pagina admin */
     } else if (req.session.userRolType == 'client'){
-        res.sendFile(path.join(__dirname, '../public/index.html'));
+        paginaProductos();
     } else {
         res.status(400).send({
             message: 'Error al iniciar sesión'

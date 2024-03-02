@@ -39,7 +39,7 @@ const guardarPerfil = async function (userName, userEmail, userPass, userRolType
         const hashPass = await bcrypt.hash(userPass, salt);
         await mongoose.connect(mongoUrlAtlas);
         const User = mongoose.model('User', userSchema);
-        await User.insertOne({
+        await User.create({
             userName,
             userEmail,
             userPass: hashPass,
@@ -60,7 +60,7 @@ const validarPerfil = async function (userEmail, userPass) {
         const userInfo = await User.findOne({userEmail});
         if(userInfo !== null){
             if(await bcrypt.compare(userPass, userInfo.userPass)){
-                return { success: true, username: userInfo.userName, useremail: userInfo.userEmail, userroltype: userInfo.userRolType};
+                return { success: true, userName: userInfo.userName, userEmail: userInfo.userEmail, userRolType: userInfo.userRolType};
             } else {return { success: false, error: 'Contraseña incorrecta' }}
         } else {return { success: false, error: 'No se registra un perfil con ese email' }}
     } catch (error) {
