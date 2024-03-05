@@ -22,7 +22,7 @@ app.use(methodOverride('_method'));
 app.use(session({
     secret: process.env.SECRET,
     resave: false,
-    saveUninitialized: false,
+    saveUninitialized: true,
     cookie: { secure: false }
 }));
 
@@ -44,6 +44,7 @@ app.set('views', path.join(__dirname, '../views'));
 
 app.get('/', (req, res) => {
     const activeSession = verificarSesion(req, res).status;
+    console.log(activeSession);
     const scriptPages = [
         {
             src: '/js/header.js',
@@ -63,7 +64,7 @@ app.get('/', (req, res) => {
             class: '',
             span: false,
             itemActiveSession: true,
-            itemInactiveSession: true,
+            itemInactiveSession: true
         },
         {
             name: 'Creá tu cuenta',

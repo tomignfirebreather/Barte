@@ -9,6 +9,7 @@ const {
     eliminarPerfil,
     iniciarSesion,
     cerrarSesion,
+    enviarSesion,
 } = require('../controllers/clientsControllers');
 
 const { roleAuthenticator } = require('../middlewares/roleAuthenticator');
@@ -21,7 +22,7 @@ router.put('/profile/edit', jwtAuthenticator(true), roleAuthenticator('client'),
 router.delete('/profile/delete', jwtAuthenticator(true), roleAuthenticator('client'), eliminarPerfil);
 
 router.get('/session/login', jwtAuthenticator(false), paginaIniciarSesion); /* programar: paginaIniciarSesion */
-router.post('/session/login', jwtAuthenticator(false), iniciarSesion);
+router.post('/session/login', jwtAuthenticator(false), iniciarSesion, enviarSesion);
 router.get('/session/logout', jwtAuthenticator(true), cerrarSesion);
 
 module.exports = router;

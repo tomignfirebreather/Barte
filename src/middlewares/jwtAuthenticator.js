@@ -3,13 +3,11 @@ const privateKey = process.env.PRIVATE_KEY;
 
 function jwtAuthenticator(sessionRequired) {
     return function (req, res, next) {
-        console.log(!sessionRequired);
-        console.log(!req.session.userRolType);
-        if (!sessionRequired && !req.session.userRolType) {
+        if (!sessionRequired && !req.session.user) {
             next();
             return;
-        } else if (!sessionRequired && req.session.userRolType) {
-            const token = req.session.token;
+        } else if (!sessionRequired && req.session.user) {
+            const token = req.session.user.token;
             if (!token) return res.status(401).send({ auth: false, message: 'No token provided.' });
             try {
                 jwt.verify(token, privateKey);
@@ -18,13 +16,17 @@ function jwtAuthenticator(sessionRequired) {
                 return res.status(403).send({ auth: false, message: 'Debe volver a iniciar sesión' });
             }
         } else {
-            const token = req.session.token;
-            if (!token) return res.status(401).send({ auth: false, message: 'No token provided.' });
-            try {
-                jwt.verify(token, privateKey);
-                next();
-            } catch (error) {
-                return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
+            if(req.session.user) {
+                const token = req.session.user.token;
+                if (!token) return res.status(401).send({ auth: false, message: 'No token provided.' });
+                try {
+                    jwt.verify(token, privateKey);
+                    next();
+                } catch (error) {
+                    return res.status(500).send({ auth: false, message: 'Failed to authenticate token.' });
+                }
+            } else {
+                return res.status(401).send({ auth: false, message: 'No ha iniciado sesión.' });
             }
         }
     }

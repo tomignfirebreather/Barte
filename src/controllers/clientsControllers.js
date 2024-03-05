@@ -5,8 +5,6 @@ const {
     generarJWT
 } = require('../models/clientsModels');
 
-const paginaProductos = require('./productsControllers');
-
 const paginaCrearPerfil = (req, res) => {
     const activeSession = verificarSesion(req, res).status;
     const scriptPages = [
@@ -73,7 +71,7 @@ const crearPerfil = async (req, res) => {
         resultado = await guardarPerfil(userName, userEmail, userPass, userRolType);
         if(resultado.success) {
             const token = await generarJWT(userEmail);
-            req.session = {
+            req.session.user = {
                 userName,
                 userEmail,
                 userRolType,
@@ -96,7 +94,7 @@ const crearPerfil = async (req, res) => {
         });
     }
 };
-const iniciarSesion = async (req, res) => {
+const iniciarSesion = async (req, res, next) => {
     var {
         userEmail,
         userPass
@@ -105,14 +103,14 @@ const iniciarSesion = async (req, res) => {
 
     if (resultado.success){
         const token = await generarJWT(userEmail);
-        req.session = {
+        req.session.user = {
             userName: resultado.userName,
             userEmail: resultado.userEmail,
             userRolType: resultado.userRolType,
-            token
+            token: token
         }
         res.set({ 'token': token });
-        enviarSesion();
+        next();
     } else if(resultado.error_db !== undefined) {
         res.status(400).send({
             message: resultado.error_db
@@ -124,22 +122,30 @@ const iniciarSesion = async (req, res) => {
     }
 };
 const enviarSesion = async (req, res) => {
-    if (req.session.userRolType == 'admin') {
-        /* enviar pagina admin */
-    } else if (req.session.userRolType == 'client'){
-        paginaProductos();
+    if(req.session.user) {
+        if (req.session.user.userRolType == 'admin') {
+            /* enviar pagina admin */
+        } else if (req.session.user.userRolType == 'client'){
+            res.redirect('/');
+        } else {
+            res.status(400).send({
+                message: 'Error al iniciar sesión'
+            });
+        }
     } else {
-        res.status(400).send({
-            message: 'Error al iniciar sesión'
-        });
+        res.redirect('/session/login');
     }
 };
 const verificarSesion = (req, res) => {
-    const token = req.session.token;
-    if (token === undefined || token === null) {
-        return { message: 'Sesión inactiva', status: false };
+    if (req.session.user) {
+        const token = req.session.user.token;
+        if (token === undefined || token === null) {
+            return { message: 'Sesión inactiva', status: false };
+        } else {
+            return{ message: 'Sesión activa', status: true };
+        }
     } else {
-        return{ message: 'Sesión activa', status: true };
+        return{ message: 'Sesión no iniciada', status: false };
     }
 }
 const cerrarSesion = async (req, res) => {

@@ -1,14 +1,10 @@
-const path = require('path');
-
 const {
     buscarData,
     guardarData,
     actualizarData,
     eliminarData
 } = require('../models/productsModels');
-const { response } = require('../app');
 const { verificarSesion } = require('./clientsControllers');
-const { log } = require('console');
 
 const paginaProductos = async (req, res) => {
     const response = await buscarTotalProductos();

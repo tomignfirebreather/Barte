@@ -8,23 +8,25 @@
     <div>
         <nav>
             <ul id="navbar">
-                {{#each navbarItems}}
-                    {{#if activeSession}}
-                        {{#if itemActiveSession}}
-                            <button id="{{id}}">
-                            {{#if span}}
-                                <li>
-                                    <span class= "{{id}}">
-                                        {{name}}
-                                    </span>
-                                </li>
-                            {{else}}
-                                <li>{{name}}</li>
+                {{#if activeSession}}
+                    {{#each navbarItems}}
+                            {{#if itemActiveSession}}
+                                <button id="{{id}}">
+                                {{#if span}}
+                                    <li>
+                                        <span class= "{{class}}">
+                                            {{name}}
+                                        </span>
+                                    </li>
+                                {{else}}
+                                    <li>{{name}}</li>
+                                {{/if}}
+                                </button>
                             {{/if}}
-                            </button>
-                        {{/if}}
-                    {{/if}}
-                    {{#unless activeSession}}
+                    {{/each}}
+                {{/if}}
+                {{#unless activeSession}}
+                    {{#each navbarItems}}
                         {{#if itemInactiveSession}}
                             <button id="{{id}}">
                             {{#if span}}
@@ -38,8 +40,8 @@
                             {{/if}}
                             </button>
                         {{/if}}
-                    {{/unless}}
-                {{/each}}
+                    {{/each}}
+                {{/unless}}
             </ul>
         </nav>
     </div>
