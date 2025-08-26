@@ -131,3 +131,8 @@ dist
 
 #Notas
 notas.txt
+
+#Archivos pesados
+node_modules/
+dist/
+build/

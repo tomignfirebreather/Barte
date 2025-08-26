@@ -43,8 +43,8 @@ app.set('view engine', 'hbs');
 app.set('views', path.join(__dirname, '../views'));
 
 app.get('/', (req, res) => {
-    const activeSession = verificarSesion(req, res).status;
-    console.log(activeSession);
+    const { status: activeSession, message } = verificarSesion(req, res);
+    console.log("Estado de sesión:", message);
     const scriptPages = [
         {
             src: '/js/header.js',
